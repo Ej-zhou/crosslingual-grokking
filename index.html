@@ -274,10 +274,21 @@ section[data-tab]{display:none}section[data-tab].on{display:block}
 <section id="inside" data-tab="main">
   <div class="col">
     <h2>Inside the model</h2>
-    <div class="verdict"><b class="partly">Partly</b><span>letters align gradually before the behavioural jump</span></div>
-    <p>Eight seeds were re-run for 60,000 steps with a checkpoint every 1,000 steps; five of them aligned. Each checkpoint is probed for whether each ASCII letter's representation can be matched to its fullwidth counterpart (a 52-way match, chance 0.02), at the embeddings and after every layer, and for whether the hidden state at a fact's answer looks the same whether the prompt was in A or in B. Everything is then lined up on the moment behaviour jumps.</p>
-    <p>The two alphabets align first, and gradually. Alignment starts in the middle layers, which are already largely matched 30,000 steps before the jump, and then extends to the lower layers and the last layer. Fact-answer states match last, and behaviour changes only once they do. Weight norms decrease smoothly with no change at onset.</p>
-    <p class="small muted">Why only partly: the pre-registered rule required letters to be unmatched 5,000 steps before the jump. They were already 80 to 90% matched. Two of the three non-aligned seeds also matched their letters by 47K without any fact transfer by the end of these 60K-step runs. Letter alignment appears necessary but not sufficient.</p>
+    <p><strong>Question.</strong> What changes inside the network when cross-script recall jumps? Does the model first learn that the two alphabets are the same, and only then that the facts are the same?</p>
+    <p><strong>What was measured.</strong> Eight seeds were re-run for 60,000 steps, saving a checkpoint every 1,000 steps; five of the eight aligned. At every checkpoint, two probes:</p>
+    <ul>
+      <li><em>Letter match.</em> Take the representation of each of the 52 letters (a–z, A–Z) in ASCII and in fullwidth, at the embedding layer and after each of the 8 blocks. Ask whether each ASCII letter is nearest to its own fullwidth twin. 52-way, so chance is 0.02. A score of 1.0 means the two alphabets have collapsed onto one set of vectors at that depth.</li>
+      <li><em>Fact match.</em> For each fact, compare the hidden state at the answer position when the prompt is in A versus in B. If they match, the model is computing the same thing regardless of script, which is what transfer needs.</li>
+    </ul>
+    <p>Each seed's curves are then shifted so that step 0 is that seed's own onset, and averaged.</p>
+    <p><strong>What happens, in order.</strong></p>
+    <ul>
+      <li>Letters align <em>early and gradually</em>, long before behaviour changes. The middle layers merge first and are mostly matched 30K steps before onset; the embedding layer and the last layer follow.</li>
+      <li>Fact states align <em>last and abruptly</em>, right at onset. Recall across scripts rises only once they do.</li>
+      <li>Weight norms fall smoothly throughout. Nothing visible happens to them at onset.</li>
+      <li>The last layer never fully merges. It still has to decide which script to emit, so it keeps some script-specific structure.</li>
+    </ul>
+    <p><strong>Reading.</strong> Letter alignment is necessary but not sufficient. Two of the three seeds that never aligned had matched their letters by 47K and still showed no fact transfer by 60K. The pre-registered prediction was that letters would be unmatched 5,000 steps before the jump; they were in fact already 80–90% matched, so the picture is a slow merging of the alphabets followed by a separate, sudden merging of the facts, and what triggers the second step is still open.</p>
   </div>
   <div class="wide">
     <div class="fig">
