@@ -171,12 +171,6 @@ footer{padding-block:28px;font-size:14px;color:var(--ink2)}
   <div class="col">
     <h2>One run in detail</h2>
     <p>Seed 1 is typical. Recall is at the never-taught floor for 48,000 steps. Over the next three evaluations it reaches 0.26, 0.68 and 0.84. Greedy generation follows about 2,000 steps behind: the model begins producing correct fullwidth answers to facts it only saw in ASCII. The script-B validation loss, which had been drifting down slowly, continues to fall through the transition and ends below every non-aligned run.</p>
-    <div class="steps">
-      <div class="step"><div class="at">step 48K</div><div class="v">0.26</div><div class="w">cross-script recall</div></div>
-      <div class="step"><div class="at">step 49K</div><div class="v">0.68</div><div class="w">first generated answers appear</div></div>
-      <div class="step"><div class="at">step 51K</div><div class="v">0.84</div><div class="w">recall; generation 0.43 A→B</div></div>
-      <div class="step"><div class="at">step 55K</div><div class="v">0.90</div><div class="w">stable to the end of the run</div></div>
-    </div>
   </div>
   <div class="wide">
     <div class="grid2">
